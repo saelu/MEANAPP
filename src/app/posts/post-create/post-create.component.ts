@@ -2,6 +2,7 @@ import { Component,EventEmitter,Output, OnInit } from '@angular/core';
 import {Post} from '../../posts/post.model'
 import { NgForm } from '@angular/forms';
 import { PostService } from '../post.service';
+import { ActivatedRoute, ParamMap } from '@angular/router';
 @Component({
   selector: 'app-post-create',
   templateUrl: './post-create.component.html',
@@ -11,15 +12,34 @@ export class PostCreateComponent implements OnInit {
   newPost = 'NO Content';
   enteredContent = '';
   enteredTitle = '';
+  private mode = 'create';
+  private postId: string;
+  isLoading = false;
+  post: Post;
   // @Output() postCreated = new EventEmitter();
-  constructor(public postService:PostService) { }
+  constructor(public postService: PostService, public route: ActivatedRoute) { }
 
   ngOnInit() {
+    this.route.paramMap.subscribe((paramMap: ParamMap) =>{
+      if (paramMap.has('postId')) {
+        this.mode = 'edit';
+        this.postId = paramMap.get('postId');
+        this.isLoading = true;
+        this.postService.getPost(this.postId).subscribe(postData => {
+         this.isLoading = false;
+          this.post = {id: postData._id, title: postData.title, content: postData.content}
+        });
+      }
+        else {
+        this.mode = 'create';
+        this.postId = null;
+      }
+    });
   }
-  onAddPost(from: NgForm) {
+  onSavePost(from: NgForm) {
 
       // this.newPost = postInput.value;
-      if(from.invalid){
+      if (from.invalid) {
         return true;
       }
     //  const post: Post = {
@@ -27,9 +47,12 @@ export class PostCreateComponent implements OnInit {
     //    content: from.value.content
     //  };
     //  this.postCreated.emit(post);
-
-    this.postService.addPost(from.value.title,from.value.content);
-    from.resetForm();
+      if (this.mode === 'create') {
+        this.postService.addPost(from.value.title, from.value.content);
+    } else {
+       this.postService.updatePost(this.postId,from.value.title, from.value.content);
+    }
+      from.resetForm();
   }
 
 }
