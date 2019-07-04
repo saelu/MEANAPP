@@ -36,6 +36,7 @@ export class PostListComponent implements OnInit {
     .subscribe((posts: Post[]) => {
       this.isLoading = false;
       this.posts = posts;
+      
     });
   }
   onDelete(postId: string) {
