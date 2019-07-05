@@ -4,7 +4,7 @@ const multer = require("multer");
 const router = express.Router();
 const MIME_TYPE_MAP = {
      'image/png': 'png',
-     'image/jpeg': 'jpeg',
+     'image/jpeg': 'jpg',
      'image/jpg': 'jpg'
 };
 const storage = multer.diskStorage({
@@ -22,7 +22,7 @@ const storage = multer.diskStorage({
         cb(null, name + '-' + Date.now() + '.' + ext);
     }
 });
-router.post("", multer({storage: storage}).single('image'),(req,res,next) =>{
+router.post("", multer({storage: storage}).single("image"),(req,res,next) =>{
     const url = req.protocol + '://' + req.get("host");
     const post = new Post({
         title: req.body.title,
@@ -49,6 +49,7 @@ router.put("/:id",
 multer({storage: storage}).single('image'),
 (req,res,next) =>{ 
     let imagePath = req.body.imagePath;
+
     if(req.file){
         console.log("file path =========")
         const url = req.protocol + '://' + req.get("host");
@@ -68,15 +69,29 @@ multer({storage: storage}).single('image'),
 });
 
 router.get("",(req,res,next) =>{
-    Post.find()
-    .then(document =>{
+   const pageSize = +req.query.pagesize;
+   const currentPage = +req.query.page;
+   const postQuery = Post.find();
+   let fatchPost;
+   if(pageSize && currentPage){
+      postQuery.skip(pageSize * (currentPage - 1))
+      .limit(pageSize);
+      
+   }
+   postQuery.then(documents =>{
+    fatchPost = documents;
+      return Post.countDocuments();
+    })
+    .then(count =>{
         res.status(200).json({
             message :'posts fatched successfully',
-            posts :document
+            posts :fatchPost,
+            maxPost: count
         });
     });
    
     });
+
 router.get("/:id",(req,res,next) =>{
     Post.findById(req.params.id).then(post =>{
         if(post){

@@ -8,3 +8,13 @@
 mat-spinner{
   margin: auto;
 }
+.post-image{
+  height: 10rem;
+  margin: 1rem 0;
+}
+.post-image img{
+  height: 100%;
+}
+mat-paginator{
+  margin-top: 1rem;
+}

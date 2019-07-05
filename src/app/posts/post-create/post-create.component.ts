@@ -66,7 +66,7 @@ export class PostCreateComponent implements OnInit {
      this.form.patchValue({image: file});
      this.form.get('image').updateValueAndValidity();
      const reader = new FileReader();
-     reader.onload = () =>{
+     reader.onload = () => {
        this.imagePreview = reader.result as string;
      }
       reader.readAsDataURL(file);
@@ -89,13 +89,12 @@ export class PostCreateComponent implements OnInit {
            this.form.value.image
            );
     } else {
-      console.log("======================================== post create " + this.postId + "  "+ + this.form.value.title + "  "+ + this.form.value.content +"  " +this.form.value.image)
+      // console.log("======================================== post create " + this.postId + "  "+ + this.form.value.title + "  "+ + this.form.value.content +"  " +this.form.value.image)
        this.postService.updatePost(
          this.postId,
          this.form.value.title,
         this.form.value.content,
-        this.form.value.image , 
-       
+        this.form.value.image ,
           );
 
     }
