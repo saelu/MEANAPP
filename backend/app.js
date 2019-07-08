@@ -4,7 +4,7 @@ const bodyParser = require("body-parser");
 
 const mongoose = require('mongoose');
 const postRoutes = require('./routes/posts');
-
+const userRoutes = require('./routes/user');
 //
 /*
 mongodb user password
@@ -14,7 +14,7 @@ mongodb user password
 //
 
 const app = express(); 
-mongoose.connect("mongodb+srv://max:bAOPjXFKbR9Fy3V9@cluster0-49t5g.mongodb.net/node-angular?retryWrites=true&w=majority",{ useNewUrlParser: true })
+mongoose.connect("mongodb+srv://max:bAOPjXFKbR9Fy3V9@cluster0-49t5g.mongodb.net/node-angular",{ useNewUrlParser: true })
 .then(() =>{
     console.log('Connected to database')
 })
@@ -38,4 +38,5 @@ app.use((req,res,next) =>{
 
 
 app.use("/api/posts",postRoutes);
+app.use("/api/user",userRoutes);
 module.exports = app;

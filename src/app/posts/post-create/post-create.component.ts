@@ -68,8 +68,8 @@ export class PostCreateComponent implements OnInit {
      const reader = new FileReader();
      reader.onload = () => {
        this.imagePreview = reader.result as string;
-     }
-      reader.readAsDataURL(file);
+     };
+     reader.readAsDataURL(file);
   }
   onSavePost() {
 
@@ -89,7 +89,7 @@ export class PostCreateComponent implements OnInit {
            this.form.value.image
            );
     } else {
-      // console.log("======================================== post create " + this.postId + "  "+ + this.form.value.title + "  "+ + this.form.value.content +"  " +this.form.value.image)
+       // console.log("======================================== post create " + this.postId + "  "+ + this.form.value.title + "  "+ + this.form.value.content +"  " +this.form.value.image)
        this.postService.updatePost(
          this.postId,
          this.form.value.title,
