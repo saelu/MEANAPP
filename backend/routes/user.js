@@ -21,17 +21,13 @@ router.post("/signup",(req, res, next) => {
    }) 
    .catch(err =>{
        res.status(500).json({
-           error: err
+          
+               message: "Invalid authentication credentials !"
        });
     });
    });
 });
 
-// router.post("/login",auth.createToken,(req,res,next) =>{
-//     res.status(201).json({
-//         message: "Successfully Login"
-//        });
-// });
 
 router.post("/login",(req,res,next) =>{
     let fetchUser;
@@ -50,7 +46,7 @@ router.post("/login",(req,res,next) =>{
        
     if(!result){
         return res.status(401).json({
-            message: "Auth failed"
+            message: "Invalid authentication credentials !"
         });
     }
     
@@ -59,13 +55,14 @@ router.post("/login",(req,res,next) =>{
      );
      res.status(200).json({
          token: token,
-         expiresIn: 3600
+         expiresIn: 3600,
+         userId: fetchUser[0]._id
      });
 
    })
    .catch(err =>{
     return res.status(401).json({
-        message: "Auth failed"
+        message: "You are not authenticated !"
     });
    })
 });

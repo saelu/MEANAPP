@@ -27,7 +27,8 @@ getPosts(postPerPage: number, currentPage: number) {
          title: post.title,
          content: post.content,
          id: post._id,
-         imagePath: post.imagePath
+         imagePath: post.imagePath,
+         creator: post.creator
        };
      }),
      maxPosts: postData.maxPost
@@ -48,7 +49,7 @@ getPostUpdateListener() {
 }
 
 getPost(id: string) {
-return this.http.get<{_id: string, title: string, content: string, imagePath: string}>(
+return this.http.get<{_id: string, title: string, content: string, imagePath: string, creator: string}>(
   'http://localhost:3000/api/posts/' + id);
 }
 
@@ -60,7 +61,7 @@ postData.append("content", content);
 postData.append("image",image,title);
 this.http
 .post<{message: string, post: Post}>(
-  'http://localhost:3000/api/posts', 
+  'http://localhost:3000/api/posts',
   postData
   )
 .subscribe((responseData) => {
@@ -93,7 +94,8 @@ if (typeof(image) === 'object') {
     id: id,
     title: title,
     content: content,
-    imagePath: image
+    imagePath: image,
+    creator: null
   };
  }
 this.http
